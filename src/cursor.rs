@@ -186,6 +186,7 @@ pub unsafe fn create_cursor<'txn, 'db>(
     db: Phantomcow<'db, Database<'db>>)
     -> Cursor<'txn, 'db>
 {
+    println!("lmdb-zero create_cursor 1");
     Cursor {
         cursor: CursorHandle(raw),
         txn: txn,
@@ -266,13 +267,20 @@ impl<'txn,'db> Cursor<'txn,'db> {
         db: Supercow<'db, Database<'db>>)
         -> Result<Self>
     {
+        println!("lmdb-zero construct 1");
         try!(tx::assert_same_env(&txn, &db));
+        println!("lmdb-zero construct 2");
 
         let mut raw: *mut ffi::MDB_cursor = ptr::null_mut();
+        println!("lmdb-zero construct 3");
         unsafe {
+            println!("lmdb-zero construct 4");
             lmdb_call!(ffi::mdb_cursor_open(tx::txptr(&txn), db.as_raw(),
                                             &mut raw));
+            println!("lmdb-zero construct 5");
         }
+
+        println!("lmdb-zero construct 6");
 
         Ok(unsafe { create_cursor(raw, txn,
                                   Supercow::phantom(db)) })

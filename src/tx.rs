@@ -577,6 +577,7 @@ impl<'env> ConstTransaction<'env> {
     pub fn cursor<'txn, 'db, DB>(&'txn self, db: DB)
                                  -> Result<Cursor<'txn,'db>>
     where DB : Into<Supercow<'db, Database<'db>>> {
+        println!("lmdb-zero cursor 1");
         Cursor::construct(Supercow::borrowed(self), db.into())
     }
 
